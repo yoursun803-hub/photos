@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>❤️ 想我的時候才能看喔！</title>
     <style>
         * {
@@ -29,7 +29,7 @@
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
             padding: 35px 25px;
             border-radius: 24px;
             box-shadow: 0 12px 40px rgba(255, 107, 129, 0.18);
@@ -48,34 +48,32 @@
             letter-spacing: 0.5px;
         }
 
-        /* 按鈕樣式 */
+        /* 按鈕樣式 (強化 Safari 點擊) */
         .btn {
             background-color: #ff6b81;
             color: white;
             border: none;
-            padding: 13px 32px;
+            padding: 14px 36px;
             font-size: 1.25rem;
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 5px 18px rgba(255, 107, 129, 0.4);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             outline: none;
-        }
-
-        .btn:hover {
-            background-color: #ff4757;
-            -webkit-transform: translateY(-2px);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(255, 107, 129, 0.6);
+            display: inline-block;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
 
         .btn:active {
-            -webkit-transform: translateY(1px);
-            transform: translateY(1px);
+            -webkit-transform: scale(0.96);
+            transform: scale(0.96);
+            background-color: #ff4757;
         }
 
-        /* 抽卡動畫區域 */
+        /* 抽卡區域 */
         .card-container {
             display: none;
             -webkit-flex-direction: column;
@@ -104,7 +102,7 @@
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* 抽卡洗牌動畫 (兼容 Safari) */
+        /* 動畫 */
         @-webkit-keyframes shuffle {
             0% { -webkit-transform: rotate(0deg) scale(1); transform: rotate(0deg) scale(1); }
             25% { -webkit-transform: rotate(-12deg) scale(1.06) translateY(-12px); transform: rotate(-12deg) scale(1.06) translateY(-12px); }
@@ -138,26 +136,21 @@
             border-radius: 18px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.12);
             overflow: hidden;
-            -webkit-transform-style: preserve-3d;
-            transform-style: preserve-3d;
         }
 
-        /* 卡牌背面（抽卡前） */
         .card-back {
             background: linear-gradient(45deg, #ff758c, #ff7eb3);
             border: 4px solid #ffffff;
             display: -webkit-flex;
             display: flex;
-            -webkit-flex-direction: column;
-            flex-direction: column;
             -webkit-justify-content: center;
             justify-content: center;
             -webkit-align-items: center;
             align-items: center;
             color: white;
             z-index: 2;
-            -webkit-transform: rotateY(0deg) translateZ(1px);
-            transform: rotateY(0deg) translateZ(1px);
+            -webkit-transform: rotateY(0deg);
+            transform: rotateY(0deg);
         }
 
         .card-back .heart-icon {
@@ -178,12 +171,11 @@
             100% { transform: scale(1); }
         }
 
-        /* 卡牌正面（顯示照片） */
         .card-front {
             background-color: white;
             border: 4px solid #ffffff;
-            -webkit-transform: rotateY(180deg) translateZ(1px);
-            transform: rotateY(180deg) translateZ(1px);
+            -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
             display: -webkit-flex;
             display: flex;
             -webkit-align-items: center;
@@ -204,7 +196,6 @@
             transform: rotateY(180deg);
         }
 
-        /* 結果文字 */
         .result-text {
             font-size: 1.45rem;
             font-weight: bold;
@@ -225,11 +216,6 @@
             background-color: #70a1ff;
             box-shadow: 0 4px 15px rgba(112, 161, 255, 0.4);
         }
-
-        .re-draw-btn:hover {
-            background-color: #1e90ff;
-            box-shadow: 0 6px 20px rgba(30, 144, 255, 0.5);
-        }
     </style>
 </head>
 <body>
@@ -238,7 +224,7 @@
         <!-- 初始畫面 -->
         <div id="start-screen">
             <h1>❤️ 想我的時候才能看喔！</h1>
-            <button class="btn" onclick="startDraw()">請抽卡！</button>
+            <button id="draw-btn" class="btn">請抽卡！</button>
         </div>
 
         <!-- 抽卡與結果畫面 -->
@@ -254,12 +240,11 @@
                 </div>
             </div>
             <div class="result-text" id="result-text"></div>
-            <button class="btn re-draw-btn" id="redraw-btn" onclick="resetCard()">再抽一次</button>
+            <button id="redraw-btn" class="btn re-draw-btn">再抽一次</button>
         </div>
     </div>
 
     <script>
-        // 9 張照片的路徑
         const photos = [
             'images/202679.jpeg',
             'images/IMG_3139.jpeg',
@@ -271,14 +256,18 @@
             'images/IMG_5846.JPG'
         ];
 
-        // 隨機文字
         const messages = [
             '要想我喔！',
             '我想妳了！',
             '愛妳'
         ];
 
+        let isProcessing = false;
+
         function startDraw() {
+            if (isProcessing) return;
+            isProcessing = true;
+
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('draw-screen').style.display = 'flex';
 
@@ -302,12 +291,15 @@
                 setTimeout(() => {
                     resultText.classList.add('show');
                     redrawBtn.style.display = 'inline-block';
+                    isProcessing = false;
                 }, 400);
 
             }, 1500);
         }
 
         function resetCard() {
+            if (isProcessing) return;
+
             const card = document.getElementById('card');
             const resultText = document.getElementById('result-text');
             const redrawBtn = document.getElementById('redraw-btn');
@@ -320,6 +312,22 @@
                 startDraw();
             }, 500);
         }
+
+        // 為點擊事件做跨平台監聽 (同時相容手機觸控 touchstart 與滑鼠 click)
+        const drawBtn = document.getElementById('draw-btn');
+        const redrawBtn = document.getElementById('redraw-btn');
+
+        ['click', 'touchstart'].forEach(eventType => {
+            drawBtn.addEventListener(eventType, function(e) {
+                e.preventDefault();
+                startDraw();
+            }, { passive: false });
+
+            redrawBtn.addEventListener(eventType, function(e) {
+                e.preventDefault();
+                resetCard();
+            }, { passive: false });
+        });
     </script>
 </body>
 </html>
