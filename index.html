@@ -14,13 +14,10 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             min-height: 100vh;
-            display: -webkit-flex;
             display: flex;
-            -webkit-justify-content: center;
             justify-content: center;
-            -webkit-align-items: center;
             align-items: center;
             text-align: center;
             color: #4a4a4a;
@@ -29,212 +26,145 @@
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.95);
             padding: 35px 25px;
             border-radius: 24px;
-            box-shadow: 0 12px 40px rgba(255, 107, 129, 0.18);
-            max-width: 420px;
+            box-shadow: 0 12px 40px rgba(255, 107, 129, 0.2);
+            max-width: 400px;
             width: 100%;
-            -webkit-backdrop-filter: blur(8px);
-            backdrop-filter: blur(8px);
-            position: relative;
         }
 
         h1 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: #e85d75;
             margin-bottom: 25px;
             line-height: 1.4;
-            letter-spacing: 0.5px;
         }
 
-        /* 按鈕樣式 (強化 Safari 點擊) */
+        /* 經典 Safari 可點擊按鈕設計 */
         .btn {
             background-color: #ff6b81;
             color: white;
             border: none;
-            padding: 14px 36px;
+            padding: 15px 40px;
             font-size: 1.25rem;
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 5px 18px rgba(255, 107, 129, 0.4);
-            transition: all 0.2s ease;
-            outline: none;
             display: inline-block;
             user-select: none;
             -webkit-user-select: none;
-            touch-action: manipulation;
+            outline: none;
         }
 
         .btn:active {
-            -webkit-transform: scale(0.96);
-            transform: scale(0.96);
+            transform: scale(0.95);
             background-color: #ff4757;
         }
 
-        /* 抽卡區域 */
         .card-container {
             display: none;
-            -webkit-flex-direction: column;
             flex-direction: column;
-            -webkit-align-items: center;
             align-items: center;
-            -webkit-justify-content: center;
-            justify-content: center;
         }
 
         .card-wrapper {
             width: 240px;
             height: 320px;
-            -webkit-perspective: 1000px;
-            perspective: 1000px;
             margin-bottom: 20px;
-        }
-
-        .card {
-            width: 100%;
-            height: 100%;
             position: relative;
-            -webkit-transform-style: preserve-3d;
-            transform-style: preserve-3d;
-            -webkit-transition: -webkit-transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* 動畫 */
-        @-webkit-keyframes shuffle {
-            0% { -webkit-transform: rotate(0deg) scale(1); transform: rotate(0deg) scale(1); }
-            25% { -webkit-transform: rotate(-12deg) scale(1.06) translateY(-12px); transform: rotate(-12deg) scale(1.06) translateY(-12px); }
-            50% { -webkit-transform: rotate(12deg) scale(0.94) translateY(12px); transform: rotate(12deg) scale(0.94) translateY(12px); }
-            75% { -webkit-transform: rotate(-6deg) scale(1.03); transform: rotate(-6deg) scale(1.03); }
-            100% { -webkit-transform: rotate(0deg) scale(1); transform: rotate(0deg) scale(1); }
-        }
-
+        /* 洗牌動畫 */
         @keyframes shuffle {
             0% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(-12deg) scale(1.06) translateY(-12px); }
-            50% { transform: rotate(12deg) scale(0.94) translateY(12px); }
-            75% { transform: rotate(-6deg) scale(1.03); }
+            25% { transform: rotate(-10deg) scale(1.05); }
+            50% { transform: rotate(10deg) scale(0.95); }
+            75% { transform: rotate(-5deg) scale(1.02); }
             100% { transform: rotate(0deg) scale(1); }
         }
 
         .shuffling {
-            -webkit-animation: shuffle 0.5s ease-in-out infinite;
-            animation: shuffle 0.5s ease-in-out infinite;
+            animation: shuffle 0.4s ease-in-out infinite;
         }
 
-        /* 卡片正面與背面 */
-        .card-front, .card-back {
+        /* 卡片區域 */
+        .card-box {
+            width: 100%;
+            height: 100%;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+            background-color: white;
+            border: 4px solid #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .card-back-view {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 3.5rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .card-front-view {
             width: 100%;
             height: 100%;
             position: absolute;
             top: 0;
             left: 0;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 18px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-            overflow: hidden;
-        }
-
-        .card-back {
-            background: linear-gradient(45deg, #ff758c, #ff7eb3);
-            border: 4px solid #ffffff;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-justify-content: center;
-            justify-content: center;
-            -webkit-align-items: center;
-            align-items: center;
-            color: white;
-            z-index: 2;
-            -webkit-transform: rotateY(0deg);
-            transform: rotateY(0deg);
-        }
-
-        .card-back .heart-icon {
-            font-size: 3.5rem;
-            -webkit-animation: pulse 1.5s infinite;
-            animation: pulse 1.5s infinite;
-        }
-
-        @-webkit-keyframes pulse {
-            0% { -webkit-transform: scale(1); transform: scale(1); }
-            50% { -webkit-transform: scale(1.15); transform: scale(1.15); }
-            100% { -webkit-transform: scale(1); transform: scale(1); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
-
-        .card-front {
-            background-color: white;
-            border: 4px solid #ffffff;
-            -webkit-transform: rotateY(180deg);
-            transform: rotateY(180deg);
-            display: -webkit-flex;
-            display: flex;
-            -webkit-align-items: center;
-            align-items: center;
-            -webkit-justify-content: center;
-            justify-content: center;
             z-index: 1;
         }
 
-        .card-front img {
+        .card-front-view img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .card.flipped {
-            -webkit-transform: rotateY(180deg);
-            transform: rotateY(180deg);
-        }
-
         .result-text {
-            font-size: 1.45rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: #ff4757;
-            opacity: 0;
-            transition: opacity 0.5s ease;
             margin-top: 10px;
             min-height: 2em;
-        }
-
-        .result-text.show {
-            opacity: 1;
+            visibility: hidden;
         }
 
         .re-draw-btn {
             margin-top: 12px;
             display: none;
             background-color: #70a1ff;
-            box-shadow: 0 4px 15px rgba(112, 161, 255, 0.4);
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- 初始畫面 -->
+        <!-- 畫面一：點擊抽卡 -->
         <div id="start-screen">
             <h1>❤️ 想我的時候才能看喔！</h1>
             <button id="draw-btn" class="btn">請抽卡！</button>
         </div>
 
-        <!-- 抽卡與結果畫面 -->
+        <!-- 畫面二：抽卡動畫與結果 -->
         <div id="draw-screen" class="card-container">
             <div class="card-wrapper">
-                <div class="card" id="card">
-                    <div class="card-back">
-                        <div class="heart-icon">❤️</div>
-                    </div>
-                    <div class="card-front">
+                <div class="card-box" id="card-box">
+                    <div class="card-back-view" id="card-back">❤️</div>
+                    <div class="card-front-view">
                         <img id="photo" src="" alt="照片">
                     </div>
                 </div>
@@ -246,88 +176,74 @@
 
     <script>
         const photos = [
-            'images/202679.jpeg',
-            'images/IMG_3139.jpeg',
-            'images/IMG_4291.JPG',
-            'images/IMG_4457.jpeg'
-            'images/IMG_4622.jepg'
-            'images/IMG_5063.JPG'
-            'images/IMG_5706.jpeg'
-            'images/IMG_5846.JPG'
+            'images/photo1.jpg',
+            'images/photo2.jpg',
+            'images/photo3.jpg',
+            'images/photo4.jpg',
+            'images/photo5.jpg',
+            'images/photo6.jpg',
+            'images/photo7.jpg',
+            'images/photo8.jpg',
+            'images/photo9.jpg'
         ];
 
-        const messages = [
-            '要想我喔！',
-            '我想妳了！',
-            '愛妳'
-        ];
+        const messages = ['要想我喔！', '我想妳了！', '愛妳'];
 
-        let isProcessing = false;
+        // 預先載入圖片（解決 Safari 點擊延遲問題）
+        photos.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
 
-        function startDraw() {
-            if (isProcessing) return;
-            isProcessing = true;
-
-            document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('draw-screen').style.display = 'flex';
-
-            const card = document.getElementById('card');
-            const resultText = document.getElementById('result-text');
-            const redrawBtn = document.getElementById('redraw-btn');
-
-            card.classList.add('shuffling');
-
-            setTimeout(() => {
-                card.classList.remove('shuffling');
-
-                const randomPhoto = photos[Math.floor(Math.random() * photos.length)];
-                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-
-                document.getElementById('photo').src = randomPhoto;
-                resultText.innerText = randomMessage;
-
-                card.classList.add('flipped');
-
-                setTimeout(() => {
-                    resultText.classList.add('show');
-                    redrawBtn.style.display = 'inline-block';
-                    isProcessing = false;
-                }, 400);
-
-            }, 1500);
-        }
-
-        function resetCard() {
-            if (isProcessing) return;
-
-            const card = document.getElementById('card');
-            const resultText = document.getElementById('result-text');
-            const redrawBtn = document.getElementById('redraw-btn');
-
-            card.classList.remove('flipped');
-            resultText.classList.remove('show');
-            redrawBtn.style.display = 'none';
-
-            setTimeout(() => {
-                startDraw();
-            }, 500);
-        }
-
-        // 為點擊事件做跨平台監聽 (同時相容手機觸控 touchstart 與滑鼠 click)
+        const startScreen = document.getElementById('start-screen');
+        const drawScreen = document.getElementById('draw-screen');
+        const cardBox = document.getElementById('card-box');
+        const cardBack = document.getElementById('card-back');
+        const photo = document.getElementById('photo');
+        const resultText = document.getElementById('result-text');
         const drawBtn = document.getElementById('draw-btn');
         const redrawBtn = document.getElementById('redraw-btn');
 
-        ['click', 'touchstart'].forEach(eventType => {
-            drawBtn.addEventListener(eventType, function(e) {
-                e.preventDefault();
-                startDraw();
-            }, { passive: false });
+        function executeDraw() {
+            startScreen.style.display = 'none';
+            drawScreen.style.display = 'flex';
+            cardBack.style.display = 'flex';
+            resultText.style.visibility = 'hidden';
+            redrawBtn.style.display = 'none';
 
-            redrawBtn.addEventListener(eventType, function(e) {
-                e.preventDefault();
-                resetCard();
-            }, { passive: false });
-        });
+            // 開始洗牌動畫
+            cardBox.classList.add('shuffling');
+
+            setTimeout(() => {
+                // 停止動畫
+                cardBox.classList.remove('shuffling');
+
+                // 隨機選取
+                const randomPhoto = photos[Math.floor(Math.random() * photos.length)];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
+                photo.src = randomPhoto;
+                resultText.innerText = randomMessage;
+
+                // 揭曉卡片
+                cardBack.style.display = 'none';
+                resultText.style.visibility = 'visible';
+                redrawBtn.style.display = 'inline-block';
+            }, 1200);
+        }
+
+        // 綁定 Safari 通用點擊事件
+        function bindClick(element, handler) {
+            element.addEventListener('touchend', function(e) {
+                handler();
+            }, false);
+            element.addEventListener('click', function(e) {
+                handler();
+            }, false);
+        }
+
+        bindClick(drawBtn, executeDraw);
+        bindClick(redrawBtn, executeDraw);
     </script>
 </body>
 </html>
