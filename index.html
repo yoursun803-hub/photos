@@ -9,14 +9,18 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             min-height: 100vh;
+            display: -webkit-flex;
             display: flex;
+            -webkit-justify-content: center;
             justify-content: center;
+            -webkit-align-items: center;
             align-items: center;
             text-align: center;
             color: #4a4a4a;
@@ -25,21 +29,23 @@
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 35px 25px;
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(255, 107, 129, 0.18);
+            max-width: 420px;
             width: 100%;
-            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
             position: relative;
         }
 
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: #e85d75;
             margin-bottom: 25px;
             line-height: 1.4;
+            letter-spacing: 0.5px;
         }
 
         /* 按鈕樣式 */
@@ -47,37 +53,43 @@
             background-color: #ff6b81;
             color: white;
             border: none;
-            padding: 12px 30px;
-            font-size: 1.2rem;
+            padding: 13px 32px;
+            font-size: 1.25rem;
             font-weight: bold;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 107, 129, 0.4);
+            box-shadow: 0 5px 18px rgba(255, 107, 129, 0.4);
             transition: all 0.3s ease;
             outline: none;
         }
 
         .btn:hover {
             background-color: #ff4757;
+            -webkit-transform: translateY(-2px);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 129, 0.6);
+            box-shadow: 0 8px 22px rgba(255, 107, 129, 0.6);
         }
 
         .btn:active {
+            -webkit-transform: translateY(1px);
             transform: translateY(1px);
         }
 
         /* 抽卡動畫區域 */
         .card-container {
             display: none;
+            -webkit-flex-direction: column;
             flex-direction: column;
+            -webkit-align-items: center;
             align-items: center;
+            -webkit-justify-content: center;
             justify-content: center;
         }
 
         .card-wrapper {
-            width: 220px;
-            height: 300px;
+            width: 240px;
+            height: 320px;
+            -webkit-perspective: 1000px;
             perspective: 1000px;
             margin-bottom: 20px;
         }
@@ -86,21 +98,32 @@
             width: 100%;
             height: 100%;
             position: relative;
+            -webkit-transform-style: preserve-3d;
             transform-style: preserve-3d;
+            -webkit-transition: -webkit-transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* 抽卡洗牌動畫 */
+        /* 抽卡洗牌動畫 (兼容 Safari) */
+        @-webkit-keyframes shuffle {
+            0% { -webkit-transform: rotate(0deg) scale(1); transform: rotate(0deg) scale(1); }
+            25% { -webkit-transform: rotate(-12deg) scale(1.06) translateY(-12px); transform: rotate(-12deg) scale(1.06) translateY(-12px); }
+            50% { -webkit-transform: rotate(12deg) scale(0.94) translateY(12px); transform: rotate(12deg) scale(0.94) translateY(12px); }
+            75% { -webkit-transform: rotate(-6deg) scale(1.03); transform: rotate(-6deg) scale(1.03); }
+            100% { -webkit-transform: rotate(0deg) scale(1); transform: rotate(0deg) scale(1); }
+        }
+
         @keyframes shuffle {
             0% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(-10deg) scale(1.05) translateY(-10px); }
-            50% { transform: rotate(10deg) scale(0.95) translateY(10px); }
-            75% { transform: rotate(-5deg) scale(1.02); }
+            25% { transform: rotate(-12deg) scale(1.06) translateY(-12px); }
+            50% { transform: rotate(12deg) scale(0.94) translateY(12px); }
+            75% { transform: rotate(-6deg) scale(1.03); }
             100% { transform: rotate(0deg) scale(1); }
         }
 
         .shuffling {
-            animation: shuffle 0.6s ease-in-out infinite;
+            -webkit-animation: shuffle 0.5s ease-in-out infinite;
+            animation: shuffle 0.5s ease-in-out infinite;
         }
 
         /* 卡片正面與背面 */
@@ -108,30 +131,66 @@
             width: 100%;
             height: 100%;
             position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
             overflow: hidden;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
         }
 
         /* 卡牌背面（抽卡前） */
         .card-back {
             background: linear-gradient(45deg, #ff758c, #ff7eb3);
-            border: 4px solid #fff;
+            border: 4px solid #ffffff;
+            display: -webkit-flex;
             display: flex;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            -webkit-justify-content: center;
             justify-content: center;
+            -webkit-align-items: center;
             align-items: center;
             color: white;
-            font-size: 3rem;
+            z-index: 2;
+            -webkit-transform: rotateY(0deg) translateZ(1px);
+            transform: rotateY(0deg) translateZ(1px);
+        }
+
+        .card-back .heart-icon {
+            font-size: 3.5rem;
+            -webkit-animation: pulse 1.5s infinite;
+            animation: pulse 1.5s infinite;
+        }
+
+        @-webkit-keyframes pulse {
+            0% { -webkit-transform: scale(1); transform: scale(1); }
+            50% { -webkit-transform: scale(1.15); transform: scale(1.15); }
+            100% { -webkit-transform: scale(1); transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
         }
 
         /* 卡牌正面（顯示照片） */
         .card-front {
             background-color: white;
-            transform: rotateY(180deg);
+            border: 4px solid #ffffff;
+            -webkit-transform: rotateY(180deg) translateZ(1px);
+            transform: rotateY(180deg) translateZ(1px);
+            display: -webkit-flex;
             display: flex;
+            -webkit-align-items: center;
             align-items: center;
+            -webkit-justify-content: center;
             justify-content: center;
+            z-index: 1;
         }
 
         .card-front img {
@@ -141,12 +200,13 @@
         }
 
         .card.flipped {
+            -webkit-transform: rotateY(180deg);
             transform: rotateY(180deg);
         }
 
         /* 結果文字 */
         .result-text {
-            font-size: 1.4rem;
+            font-size: 1.45rem;
             font-weight: bold;
             color: #ff4757;
             opacity: 0;
@@ -160,13 +220,15 @@
         }
 
         .re-draw-btn {
-            margin-top: 15px;
+            margin-top: 12px;
             display: none;
             background-color: #70a1ff;
+            box-shadow: 0 4px 15px rgba(112, 161, 255, 0.4);
         }
 
         .re-draw-btn:hover {
             background-color: #1e90ff;
+            box-shadow: 0 6px 20px rgba(30, 144, 255, 0.5);
         }
     </style>
 </head>
@@ -183,7 +245,9 @@
         <div id="draw-screen" class="card-container">
             <div class="card-wrapper">
                 <div class="card" id="card">
-                    <div class="card-back">❤️</div>
+                    <div class="card-back">
+                        <div class="heart-icon">❤️</div>
+                    </div>
                     <div class="card-front">
                         <img id="photo" src="" alt="照片">
                     </div>
@@ -195,7 +259,7 @@
     </div>
 
     <script>
-        // 1. 請在此處放入你的照片網址或相對路徑檔名
+        // 9 張照片的路徑
         const photos = [
             'images/202679.jpeg',
             'images/IMG_3139.jpeg',
@@ -207,7 +271,7 @@
             'images/IMG_5846.JPG'
         ];
 
-        // 2. 隨機顯示的溫馨文字
+        // 隨機文字
         const messages = [
             '要想我喔！',
             '我想妳了！',
@@ -215,7 +279,6 @@
         ];
 
         function startDraw() {
-            // 切換畫面
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('draw-screen').style.display = 'flex';
 
@@ -223,31 +286,25 @@
             const resultText = document.getElementById('result-text');
             const redrawBtn = document.getElementById('redraw-btn');
 
-            // 播放洗牌/震動動畫 (持續 1.5 秒)
             card.classList.add('shuffling');
 
             setTimeout(() => {
-                // 停止動畫
                 card.classList.remove('shuffling');
 
-                // 隨機選擇照片與文字
                 const randomPhoto = photos[Math.floor(Math.random() * photos.length)];
                 const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
-                // 設置圖片與文字
                 document.getElementById('photo').src = randomPhoto;
                 resultText.innerText = randomMessage;
 
-                // 翻牌動畫
                 card.classList.add('flipped');
 
-                // 翻牌後顯示文字與重新抽卡按鈕
                 setTimeout(() => {
                     resultText.classList.add('show');
                     redrawBtn.style.display = 'inline-block';
                 }, 400);
 
-            }, 1500); // 1.5 秒抽卡動畫時間
+            }, 1500);
         }
 
         function resetCard() {
@@ -255,12 +312,10 @@
             const resultText = document.getElementById('result-text');
             const redrawBtn = document.getElementById('redraw-btn');
 
-            // 蓋牌並隱藏文字
             card.classList.remove('flipped');
             resultText.classList.remove('show');
             redrawBtn.style.display = 'none';
 
-            // 稍微延遲後重新開始抽卡
             setTimeout(() => {
                 startDraw();
             }, 500);
